@@ -21,7 +21,7 @@ services:
       - "traefik.docker.network=$DEFAULT_NETWORK"
       - "traefik.http.routers.nextcloud.entrypoints=websecure"
       - "traefik.http.routers.nextcloud.rule=Host(`cloud.$MY_DOMAIN`)"
-      - "traefik.http.routers.nextcloud.tls.certresolver=lets-encr"
+      - "traefik.http.routers.nextcloud.tls.certresolver=letsEncrypt"
       # Middlewares:
       - "traefik.http.routers.nextcloud.middlewares=nextcloud-ssl@docker, nextcloud-dav@docker"
       # Middleware nextcloud adds additional headers:

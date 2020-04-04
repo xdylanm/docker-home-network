@@ -23,7 +23,7 @@ services:
             - "traefik.enable=true"
             - "traefik.http.routers.collabora.entrypoints=websecure"
             - "traefik.http.routers.collabora.rule=Host(`office.$MY_DOMAIN`)"
-            - "traefik.http.routers.collabora.tls.certresolver=lets-encr"
+            - "traefik.http.routers.collabora.tls.certresolver=letsEncrypt"
 
 networks:
     default:

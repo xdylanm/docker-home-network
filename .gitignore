@@ -5,4 +5,4 @@ unifi/
 ddclient/
 nextcloud/
 mariadb/
-traefik/
+traefik/acme.json
