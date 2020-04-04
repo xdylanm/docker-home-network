@@ -1,0 +1,11 @@
+version: "3.7"
+
+services:
+  ddclient:
+    image: linuxserver/ddclient
+    container_name: ddclient
+    env_file:
+      - .env
+    volumes:
+      - "./ddclient/config/:/config"
+    restart: unless-stopped

@@ -1,0 +1,8 @@
+.env
+secrets/
+collabora/
+unifi/
+ddclient/
+nextcloud/
+mariadb/
+traefik/

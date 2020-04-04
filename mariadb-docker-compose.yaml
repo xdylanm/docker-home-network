@@ -1,0 +1,20 @@
+version: "3.7"
+
+services:
+  nextcloud-db:
+    image: mariadb
+    container_name: cloud-db
+    restart: unless-stopped
+    env_file:
+      - .env
+    ports:
+      - "3306:3306"
+    volumes:
+      - "./mariadb/db:/var/lib/mysql"
+    networks:
+      - backend
+
+networks:
+    backend:
+        external:
+            name: $BACKEND_NETWORK

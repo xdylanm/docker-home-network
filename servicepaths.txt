@@ -1,0 +1,8 @@
+collabora
+ddclient/config
+mariadb/db
+nextcloud/apps
+nextcloud/config
+nextcloud/html
+unifi/config
+traefik

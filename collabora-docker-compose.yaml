@@ -1,0 +1,31 @@
+
+version: "3.7"
+
+services:
+    collabora:
+        image: "collabora/code"
+        container_name: "collabora"
+        restart: unless-stopped
+        env_file:
+            - .env
+        environment:
+            # Collabora requires a special esacping of characters for the domain
+            - "domain=$COLLABORA_CLOUD_DOMAIN"
+            - "username=$COLLABORA_USERNAME"
+            - "password=$COLLABORA_PASSWORD"
+        volumes:
+            - "./collabora/loolwsd.xml:/etc/loolwsd/loolwsd.xml"
+        cap_add:        # https://nextcloud.com/collaboraonline/
+            - MKNOD
+        expose:
+            - "9980"
+        labels:
+            - "traefik.enable=true"
+            - "traefik.http.routers.collabora.entrypoints=websecure"
+            - "traefik.http.routers.collabora.rule=Host(`office.$MY_DOMAIN`)"
+            - "traefik.http.routers.collabora.tls.certresolver=lets-encr"
+
+networks:
+    default:
+        external:
+            name: $DEFAULT_NETWORK

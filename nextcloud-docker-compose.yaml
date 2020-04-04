@@ -1,0 +1,45 @@
+version: "3.7"
+
+services:
+  nextcloud:
+    image: "nextcloud:apache"
+    container_name: "nextcloud"
+    hostname: "cloud"
+    restart: unless-stopped
+    env_file:
+      - .env
+        #ports:
+        #- "9980:80"
+    volumes:
+      - "./nextcloud/html:/var/www/html"
+      - "./nextcloud/apps:/var/www/html/custom_apps"
+      - "./nextcloud/config:/var/www/html/config"
+      - "/home/share/nextcloud:/var/opt/nextcloud"
+      - "/home/share/media:/home/share/media"
+    labels:
+      - "traefik.enable=true"
+      - "traefik.docker.network=$DEFAULT_NETWORK"
+      - "traefik.http.routers.nextcloud.entrypoints=websecure"
+      - "traefik.http.routers.nextcloud.rule=Host(`cloud.$MY_DOMAIN`)"
+      - "traefik.http.routers.nextcloud.tls.certresolver=lets-encr"
+      # Middlewares:
+      - "traefik.http.routers.nextcloud.middlewares=nextcloud-ssl@docker, nextcloud-dav@docker"
+      # Middleware nextcloud adds additional headers:
+      - "traefik.http.middlewares.nextcloud-ssl.headers.sslredirect=true"
+      - "traefik.http.middlewares.nextcloud-ssl.headers.stsIncludeSubdomains=true"
+      - "traefik.http.middlewares.nextcloud-ssl.headers.stsPreload=true"
+      - "traefik.http.middlewares.nextcloud-ssl.headers.stsSeconds=15552000"
+      # Middleware nextcloud-dav replaces .well-known paths for caldav and carddav with proper nextcloud path
+      - "traefik.http.middlewares.nextcloud-dav.replacepathregex.regex=^/.well-known/ca(l|rd)dav"
+      - "traefik.http.middlewares.nextcloud-dav.replacepathregex.replacement=/remote.php/dav/"
+    networks:
+      - frontend
+      - backend
+
+networks:
+  frontend:
+    external:
+      name: $DEFAULT_NETWORK
+  backend:
+    external:
+      name: $BACKEND_NETWORK
