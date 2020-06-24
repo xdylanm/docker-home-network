@@ -5,6 +5,7 @@ services:
         image: portainer/portainer
         container_name: portainer
         hostname: portainer
+        restart: unless-stopped
         volumes:
             - /var/run/docker.sock:/var/run/docker.sock:ro
             - portainer_data:/data

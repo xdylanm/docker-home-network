@@ -1,0 +1,36 @@
+version: "3.7"
+
+services:
+    grafana:
+        image: grafana/grafana
+        container_name: grafana
+        hostname: "dashboard"
+        restart: unless-stopped
+        env_file:
+            - .env
+        environment:
+            - "GF_SERVER_DOMAIN=dashboard.$MY_DOMAIN"
+            - "GF_SERVER_ROOT_URL=https://dashboard.$MY_DOMAIN"
+            - "GF_USERS_ALLOW_SIGN_UP=false"
+#        ports:
+#            - 3000:3000
+        networks:
+            - frontend
+        volumes:
+            - /var/run/docker.sock:/var/run/docker.sock:ro
+            - grafana_data:/var/lib/grafana
+        labels:
+            - "traefik.enable=true"
+            - "traefik.http.routers.dashboard.entrypoints=websecure"
+            - "traefik.http.routers.dashboard.rule=Host(`dashboard.$MY_DOMAIN`)"
+            - "traefik.http.routers.dashboard.tls.certresolver=letsEncrypt"
+            - "traefik.http.routers.dashboard.service=dashboard"
+            - "traefik.http.services.dashboard.loadBalancer.server.port=3000"
+
+networks:
+  frontend:
+    external:
+      name: $DEFAULT_NETWORK
+
+volumes:
+    grafana_data:

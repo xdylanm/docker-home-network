@@ -5,4 +5,8 @@ unifi/
 ddclient/
 nextcloud/
 mariadb/
+influxdb/
+mosquitto/
+grafana/
+telegraf/
 traefik/acme.json

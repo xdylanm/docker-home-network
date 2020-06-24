@@ -1,0 +1,26 @@
+version: "3.7"
+
+services:
+    mosquitto:
+        image: eclipse-mosquitto
+        container_name: mosquitto
+        hostname: mosquitto
+        volumes:
+            - /var/run/docker.sock:/var/run/docker.sock:ro
+            - "./mosquitto/mosquitto.conf:/mosquitto/config/mosquitto.conf"
+            - "./mosquitto/data:/mosquitto/data"
+            - "./mosquitto/log:/mosquitto/log" 
+            - "./mosquitto/certs:/mosquitto/certs"
+            - "./mosquitto/ca_certificates:/mosquitto/ca_certificates"
+        ports:
+            - "8883:8883"
+            - "9001:9001"
+        labels:
+            - "traefik.enable=false"
+        restart: unless-stopped
+
+networks:
+    default:
+        external:
+            name: $DEFAULT_NETWORK
+

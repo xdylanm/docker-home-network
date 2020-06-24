@@ -1,0 +1,14 @@
+version: "3.7"
+
+services:
+    telegraf:
+        image: telegraf:1.14     # avoid migration to breaking 2.0 until ready
+        container_name: telegraf
+        restart: unless-stopped
+        env_file:
+            - .env
+        volumes:
+            - /proc:/host/proc:ro
+            - ./telegraf/config/telegraf.conf:/etc/telegraf/telegraf.conf:ro
+        network_mode: "container:influxdb"
+

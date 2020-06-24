@@ -1,0 +1,21 @@
+version: "3.7"
+
+services:
+    influxdb:
+        image: influxdb:1.8     # avoid migration to breaking 2.0 until ready
+        container_name: influxdb
+        restart: unless-stopped
+        env_file:
+            - .env
+        ports:
+            - "8086:8086"
+        volumes:
+            - ./influxdb/db:/var/lib/influxdb
+            - ./influxdb/config/influxdb.conf:/etc/influxdb/influxdb.conf:ro
+        networks:
+            - backend
+
+networks:
+    backend:
+        external:
+            name: $BACKEND_NETWORK

@@ -5,6 +5,7 @@ services:
     image: "containous/whoami"
     container_name: "whoami"
     hostname: "whoami"
+    restart: unless-stopped
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.whoami.entrypoints=websecure"
