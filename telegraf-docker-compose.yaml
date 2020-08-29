@@ -10,5 +10,6 @@ services:
         volumes:
             - /proc:/host/proc:ro
             - ./telegraf/config/telegraf.conf:/etc/telegraf/telegraf.conf:ro
+            - ./telegraf/config/mosquitto-ca.crt:/etc/telegraf/mosquitto-ca.crt:ro
         network_mode: "container:influxdb"
 
