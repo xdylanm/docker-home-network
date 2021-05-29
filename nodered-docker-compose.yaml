@@ -1,0 +1,28 @@
+version: "3.7"
+
+services:
+    node-red:
+        image: nodered/node-red:latest
+        container_name: node-red
+        hostname: remotecontrol 
+        restart: unless-stopped
+        env_file:
+            - .env
+        ports:
+            - 1880:1880
+        networks:
+            - frontend
+        volumes:
+            - ./nodered/data:/data
+        labels:
+            - "traefik.enable=false"
+              #            - "traefik.http.routers.remotecontrol.entrypoints=websecure"
+              #            - "traefik.http.routers.remotecontrol.rule=Host(`remotecontrol.$MY_DOMAIN`)"
+              #            - "traefik.http.routers.remotecontrol.tls.certresolver=letsEncrypt"
+              #            - "traefik.http.routers.remotecontrol.service=remotecontrol"
+              #            - "traefik.http.services.remotecontrol.loadBalancer.server.port=1880"
+
+networks:
+    frontend:
+        external:
+            name: $DEFAULT_NETWORK

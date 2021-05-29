@@ -6,3 +6,4 @@ nextcloud/config
 nextcloud/html
 unifi/config
 traefik
+nodered/data

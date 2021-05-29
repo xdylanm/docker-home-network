@@ -10,3 +10,4 @@ mosquitto/
 grafana/
 telegraf/
 traefik/acme.json
+nodered/
