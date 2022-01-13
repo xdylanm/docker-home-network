@@ -2,7 +2,7 @@ version: "3.7"
 
 services:
     portainer:
-        image: portainer/portainer
+        image: portainer/portainer-ce
         container_name: portainer
         hostname: portainer
         restart: unless-stopped
@@ -10,10 +10,20 @@ services:
             - /var/run/docker.sock:/var/run/docker.sock:ro
             - portainer_data:/data
         labels:
+            # Frontend
             - "traefik.enable=true"
             - "traefik.http.routers.portainer.entrypoints=websecure"
             - "traefik.http.routers.portainer.rule=Host(`portainer.$MY_DOMAIN`)"
             - "traefik.http.routers.portainer.tls.certresolver=letsEncrypt"
+            - "traefik.http.routers.portainer.service=portainer"
+            - "traefik.http.services.portainer.loadBalancer.server.port=9000"
+
+            # Edge
+            # - "traefik.http.routers.portainer_edge.entrypoints=websecure"
+            # - "traefik.http.routers.portainer_edge.rule=Host(`edge.$MY_DOMAIN`)"
+            # - "traefik.http.routers.portainer_edge.tls.certresolver=letsEncrypt"
+            # - "traefik.http.routers.portainer_edge.service=portainer_edge"
+            # - "traefik.http.services.portainer_edge.loadBalancer.server.port=8000"
 
 networks:
     default:
