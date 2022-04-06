@@ -7,3 +7,5 @@ nextcloud/html
 unifi/config
 traefik
 nodered/data
+pihole/etc/pihole
+pihole/etc/dnsmasq.d

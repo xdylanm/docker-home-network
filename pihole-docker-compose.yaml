@@ -1,0 +1,19 @@
+version: "3"
+
+# More info at https://github.com/pi-hole/docker-pi-hole/ and https://docs.pi-hole.net/
+services:
+  pihole:
+    container_name: pihole
+    image: pihole/pihole:latest
+    restart: unless-stopped
+    env_file:
+        - .env
+    volumes:
+      - "./pihole/etc/pihole:/etc/pihole"
+      - "./pihole/etc/dnsmasq.d:/etc/dnsmasq.d"
+    ports:
+      - 53:53/tcp
+      - 53:53/udp
+      - 8082:80/tcp
+    labels:
+      - "traefik.enable=false"

@@ -11,3 +11,4 @@ grafana/
 telegraf/
 traefik/acme.json
 nodered/
+pihole/
