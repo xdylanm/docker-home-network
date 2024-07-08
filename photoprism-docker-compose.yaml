@@ -1,0 +1,56 @@
+version: "3.7"
+
+services:
+    photoprism:
+        image: photoprism/photoprism
+        depends_on:
+            - mariadb
+        container_name: photoprism
+        hostname: "photos"
+        restart: unless-stopped
+
+        env_file:
+            - .env
+        environment:
+            - PHOTOPRISM_UID=1004
+            - PHOTOPRISM_GID=1005
+            - PHOTOPRISM_AUTH_MODE=password  
+            - PHOTOPRISM_DATABASE_SERVER=mariadb:3306
+        volumes:
+            - "/nfs/photoprism/photos:/photoprism/originals"
+            - "/nfs/photoprism/import:/photoprism/import"
+            - "./photoprism/storage:/photoprism/storage"
+        working_dir: "/photoprism" # do not change or remove
+        labels:
+            # Frontend
+            - "traefik.enable=true"
+            - "traefik.http.routers.photos.entrypoints=websecure"
+            - "traefik.http.routers.photos.rule=Host(`photos.$MY_DOMAIN`)"
+            - "traefik.http.routers.photos.tls.certresolver=letsEncrypt"
+            - "traefik.http.routers.photos.service=photos"
+            - "traefik.http.services.photos.loadBalancer.server.port=2342"
+    mariadb:
+        image: mariadb:11
+        container_name: mariadb
+        restart: unless-stopped
+        security_opt:
+            - seccomp:unconfined
+            - apparmor:unconfined
+        command: --innodb-buffer-pool-size=512M --transaction-isolation=READ-COMMITTED --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci --max-connections=512 --innodb-rollback-on-timeout=OFF --innodb-lock-wait-timeout=120
+        env_file:
+            - .env
+        environment:
+            - MARIADB_DATABASE=${PHOTOPRISM_DATABASE_NAME}
+            - MARIADB_USER=${PHOTOPRISM_DATABASE_USER}
+            - MARIADB_PASSWORD=${PHOTOPRISM_DATABASE_PASSWORD}
+        ports:
+            - "3306:3306"
+        volumes:
+            - "./photoprism/database:/var/lib/mysql"
+        labels:
+            - "traefik.enable=false"
+
+networks:
+    default:
+        external:
+            name: $DEFAULT_NETWORK
