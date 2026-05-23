@@ -2,7 +2,7 @@ version: "3.7"
 
 services:
     node-red:
-        image: nodered/node-red:latest
+        image: nodered/node-red:4.1.10
         container_name: node-red
         hostname: remotecontrol 
         restart: unless-stopped
